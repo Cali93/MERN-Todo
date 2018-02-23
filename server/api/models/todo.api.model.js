@@ -1,12 +1,13 @@
-const mongoose = require ('mongoose');
-
-var todoSchema = mongoose.Schema({
+import mongoose from 'mongoose';
+var Schema = mongoose.Schema({
   createdAt:{
-    type:Date,
+    type: Date,
     default: Date.now
   },
-  todoText: String,
-  todoDesc: String
+  fullName:{
+    type: String,
+    default: "Howdy stranger"
+  },
+  todoText: String
 });
-
-module.exports = mongoose.model('Todo', todoSchema);
+export default mongoose.model('Todo', Schema);

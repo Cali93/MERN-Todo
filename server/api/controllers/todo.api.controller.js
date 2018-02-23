@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
-const Todo = require('../models/todo.api.model');
+import Todo from '../models/todo.api.model';
 
 // Retrieving all the todos
 export const getTodos = (req, res) => {
@@ -27,7 +27,7 @@ export const addTodo = (req,res) => {
     if(err){
     return res.json({'success':false,'message':'Error while creating a new todo'});
     }
-return res.json({'success':true,'message':'Todo added successfully',todo});
+return res.json({'success':true,'message':'Todo added successfully', todo});
   })
 }
 
@@ -64,6 +64,6 @@ export const deleteTodo = (req,res) => {
     if(err){
     return res.json({'success':false,'message':'Error while deleting a todo'});
     }
-return res.json({'success':true,'message':todo.todoText+' deleted successfully'});
+return res.json({'success':true,'message':todo.name+' deleted successfully'});
   })
 }

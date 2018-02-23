@@ -1,6 +1,7 @@
-const express = require ('express');
+import express from 'express';
+import * as todoCtrl from '../controllers/todo.api.controller';
+
 const router = express.Router();
-const todoCtrl = require ('../controllers/todo.api.controller');
 
 router.route('/')
             .get(todoCtrl.getTodos)
@@ -12,5 +13,4 @@ router.route('/:id')
             .post(todoCtrl.addTodo)
             .put(todoCtrl.deleteTodo);
 
-module.exports = router;
-
+export default router;
