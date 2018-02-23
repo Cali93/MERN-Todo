@@ -1,0 +1,21 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "a simple todo rest api",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "author": "CaliDev",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.2",
+    "express-busboy": "^6.0.1",
+    "mongoose": "^5.0.6",
+    "morgan": "^1.9.0",
+    "source-map-support": "^0.5.3"
+  },
+  "presets":"env"
+}

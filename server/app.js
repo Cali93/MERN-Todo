@@ -1,0 +1,68 @@
+const express = require('express');
+const path = require('path');
+const bodyParser = require('body-parser');
+const logger = require('morgan');
+const mongoose = require('mongoose');
+const bb = require('express-busboy');
+const SourceMapSupport = require ('source-map-support');
+// import routes
+const todoRoutes = require('./api/routes/todo.api.route');
+
+// connexion to the MongoDB collection
+
+mongoose.Promise = global.Promise;
+mongoose.connect('mongodb://localhost:27017/merntodo')
+
+// define our app using express
+const app = express();
+
+// express-busboy to parse multi-part/form-data
+bb.extend(app);
+
+// configure app
+app.use(logger('dev'));
+app.use('/uploads', express.static('uploads'));
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
+app.use(express.static(path.join(__dirname, 'public')));
+
+// allow cors (cross origin ressources sharing)
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+  );
+  if (req.method === "OPTIONS") {
+    res.header("Access-Control-Allow-Methods", "PUT, POST, PATCH, DELETE, GET");
+    return res.status(200).json({});
+  }
+  next();
+});
+
+// Routes which should handle requests
+app.use('/user', userRoutes);
+app.use('/api', todoRoutes);
+app.use('/products', productRoutes);
+app.use('/orders', orderRoutes);
+
+// Handle errors
+app.use((req, res, next) => {
+  const error = new Error("Not found");
+  error.status = 404;
+  next(error);
+});
+
+app.use((error, req, res, next) => {
+  res.status(error.status || 500);
+  res.json({
+    error: {
+      message: error.message
+    }
+  });
+});
+
+
+module.exports = app;
