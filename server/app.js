@@ -1,17 +1,13 @@
-const express = require('express');
-const path = require('path');
-const bodyParser = require('body-parser');
-const logger = require('morgan');
-const mongoose = require('mongoose');
-const bb = require('express-busboy');
-const SourceMapSupport = require ('source-map-support');
+import express from 'express';
+import path from 'path';
+import bodyParser from 'body-parser';
+import logger from 'morgan';
+import mongoose from 'mongoose';
+import config from './api/config/database';
+import bb from 'express-busboy';
+import SourceMapSupport from 'source-map-support';
 // import routes
-const todoRoutes = require('./api/routes/todo.api.route');
-
-// connexion to the MongoDB collection
-
-mongoose.Promise = global.Promise;
-mongoose.connect('mongodb://localhost:27017/merntodo')
+import todoRoutes from './api/routes/todo.api.route';
 
 // define our app using express
 const app = express();
@@ -28,6 +24,16 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// connexion to the MongoDB collection
+
+mongoose.Promise = global.Promise;
+mongoose.connect(config.database)
+.then(() => console.log(`Connected to database ${config.database}`))
+.catch((err) => console.log(`Database error: ${err}`));
+
+// adding Source Map Support
+SourceMapSupport.install();
+
 // allow cors (cross origin ressources sharing)
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -43,10 +49,10 @@ app.use((req, res, next) => {
 });
 
 // Routes which should handle requests
-app.use('/user', userRoutes);
+// app.use('/user', userRoutes);
 app.use('/api', todoRoutes);
-app.use('/products', productRoutes);
-app.use('/orders', orderRoutes);
+// app.use('/products', productRoutes);
+// app.use('/orders', orderRoutes);
 
 // Handle errors
 app.use((req, res, next) => {
