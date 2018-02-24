@@ -19,7 +19,7 @@ bb.extend(app);
 app.use(logger('dev'));
 app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({
-  extended: true
+  extended: false
 }));
 app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));

@@ -6,11 +6,10 @@ const router = express.Router();
 router.route('/')
             .get(todoCtrl.getTodos)
             .post(todoCtrl.addTodo)
-            .put(todoCtrl.updateTodo);
 
-router.route('/:id')
+router.route('/:todoId')
             .get(todoCtrl.getTodo)
-            .post(todoCtrl.addTodo)
-            .put(todoCtrl.deleteTodo);
+            .patch(todoCtrl.updateTodo)
+            .delete(todoCtrl.deleteTodo)
 
 export default router;

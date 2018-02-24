@@ -3,67 +3,135 @@ import mongoose from 'mongoose';
 import Todo from '../models/todo.api.model';
 
 // Retrieving all the todos
-export const getTodos = (req, res) => {
-  Todo.find().exec((err, todos) => {
-    if (err) {
-      return res.json({
-        'success': false,
-        'message': ' There has been an error while fetching the data'
+export const getTodos = (req, res, next) => {
+  Todo.find()
+    .select("_id createdAt name description")
+    .exec()
+    .then(docs => {
+      const response = {
+        count: docs.length,
+        todos: docs.map(doc => {
+          return {
+            _id: doc._id,
+            createdAt: doc.createdAt,
+            name: doc.name,
+            description: doc.description,
+            request: {
+              type: "GET",
+              url: "http://localhost:3000/api/" + doc._id
+            }
+          }
+        })
+      }
+      res.status(200).json(response);
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err
       });
-    }
-
-    return res.json({
-      'success': true,
-      'message': 'Todos fetched successfully',
-      todos
-    });
-  });
+    })
 }
 
 // Adding a new todo
-export const addTodo = (req,res) => {
-  const newTodo = new Todo(req.body);
-  newTodo.save((err,todo) => {
-    if(err){
-    return res.json({'success':false,'message':'Error while creating a new todo'});
-    }
-return res.json({'success':true,'message':'Todo added successfully', todo});
-  })
-}
-
-// Updating a todo
-
-export const updateTodo = (req,res) => {
-  Todo.findOneAndUpdate({ _id:req.body.id }, req.body, { new:true }, (err,todo) => {
-    if(err){
-    return res.json({'success':false,'message':'Error while updating a todo','error':err});
-    }
-    console.log(todo);
-    return res.json({'success':true,'message':'Updated successfully',todo});
-  })
+export const addTodo = (req, res, next) => {
+  const newTodo = new Todo({
+    _id: new mongoose.Types.ObjectId(),
+    name: req.body.name,
+    description: req.body.description,
+    createdAt: req.body.createdAt
+  });
+  newTodo
+    .save()
+    .then(result => {
+      console.log(result);
+      res.status(201).json({
+        message: "Created todo successfully",
+        createdTodo: {
+          _id: result._id,
+          createdAt: result.createdAt,
+          name: result.name,
+          description: result.description,
+          request: {
+            type: 'GET',
+            url: "http://localhost:3000/api/" + result._id
+          }
+        }
+      })
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error:err
+      })
+    })
 }
 
 // Getting a single todo
-export const getTodo = (req,res) => {
-  Todo.find({_id:req.params.id}).exec((err,todo) => {
-    if(err){
-    return res.json({'success':false,'message':'Error while getting a todo'});
-    }
-    if(todo.length){
-      return res.json({'success':true,'message':'Todo fetched by id successfully',todo});
-    }
-    else{
-      return res.json({'success':false,'message':'Todo with the given id not found'});
-    }
-  })
+export const getTodo = (req, res, next) => {
+  const id = req.params.todoId;
+  Todo.findById(id)
+    .select('name description _id createdAt')
+    .exec()
+    .then(doc => {
+      console.log("From database", doc);
+      if (doc) {
+        res.status(200).json({
+            product: doc,
+            request: {
+                type: 'GET',
+                url: 'http://localhost:3000/api/'
+            }
+        });
+      } else {
+        res
+          .status(404)
+          .json({ message: "No valid entry found for provided ID" });
+      }
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+}
+
+// Updating a todo
+export const updateTodo = (req, res, next) => {
+  
+  const id = req.params.todoId;
+
+  Todo.findOneAndUpdate({ _id: id }, req.body, { new:false })
+    .exec()
+    .then(result => {
+      res.status(200).json({
+          message: 'Todo updated',
+          request: {
+              type: 'GET',
+              url: 'http://localhost:3000/api/' + id
+          }
+      });
+    })
+    .catch(err => {
+      console.log(err);
+      res.status(500).json({
+        error: err
+      });
+    });
 }
 
 // Deleting a todo
-export const deleteTodo = (req,res) => {
-  Todo.findByIdAndRemove(req.params.id, (err,todo) => {
-    if(err){
-    return res.json({'success':false,'message':'Error while deleting a todo'});
-    }
-return res.json({'success':true,'message':todo.name+' deleted successfully'});
-  })
+export const deleteTodo = (req, res, next) => {
+  const id = req.params.todoId
+  Todo.remove({_id:id})
+    .exec()
+    .then(result => {
+      res.status(200).json({
+        message: 'Todo deleted',
+        request: {
+            type: 'POST',
+            url: 'http://localhost:3000/api/',
+            body: { name: 'String', description: 'string' }
+        }
+      })
+    })
 }
