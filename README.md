@@ -1,0 +1,1 @@
+A simple MongoDB, Express, React-Redux, NodeJS to-do app with CRUD ops.
