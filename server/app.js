@@ -50,7 +50,7 @@ app.use((req, res, next) => {
 
 // Routes which should handle requests
 // app.use('/user', userRoutes);
-app.use('/api', todoRoutes);
+app.use('/api/todos', todoRoutes);
 // app.use('/products', productRoutes);
 // app.use('/orders', orderRoutes);
 

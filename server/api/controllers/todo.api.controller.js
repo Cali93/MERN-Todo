@@ -18,7 +18,7 @@ export const getTodos = (req, res, next) => {
             description: doc.description,
             request: {
               type: "GET",
-              url: "http://localhost:3000/api/" + doc._id
+              url: "http://localhost:3000/api/todos/" + doc._id
             }
           }
         })
@@ -54,7 +54,7 @@ export const addTodo = (req, res, next) => {
           description: result.description,
           request: {
             type: 'GET',
-            url: "http://localhost:3000/api/" + result._id
+            url: "http://localhost:3000/api/todos/" + result._id
           }
         }
       })
@@ -80,7 +80,7 @@ export const getTodo = (req, res, next) => {
             product: doc,
             request: {
                 type: 'GET',
-                url: 'http://localhost:3000/api/'
+                url: 'http://localhost:3000/api/todos/'
             }
         });
       } else {
@@ -107,7 +107,7 @@ export const updateTodo = (req, res, next) => {
           message: 'Todo updated',
           request: {
               type: 'GET',
-              url: 'http://localhost:3000/api/' + id
+              url: 'http://localhost:3000/api/todos/' + id
           }
       });
     })
@@ -129,7 +129,7 @@ export const deleteTodo = (req, res, next) => {
         message: 'Todo deleted',
         request: {
             type: 'POST',
-            url: 'http://localhost:3000/api/',
+            url: 'http://localhost:3000/api/todos/',
             body: { name: 'String', description: 'string' }
         }
       })
