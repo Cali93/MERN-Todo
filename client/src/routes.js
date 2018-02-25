@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, IndexRouter } from 'react-router';
+import { Route, IndexRoute } from 'react-router';
 import App from './containers/App';
 import Todos from './containers/Todos';
 import Todo from './containers/Todo';

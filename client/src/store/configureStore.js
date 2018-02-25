@@ -8,7 +8,7 @@ import rooterReducer from '../reducers';
 
 export default function configureStore(initialState) {
   const middlewares = [
-    thunk,
+    thunk
   ];
 
   const store = createStore(rooterReducer, initialState, compose(

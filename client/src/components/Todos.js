@@ -28,26 +28,26 @@ export default class Todos extends React.Component {
     this.props.mappedshowDeleteModal(todoToDelete);
   }
 
-  cofirmDeleteTodo(){
+  confirmDeleteTodo(){
     this.props.mappedDeleteTodo(this.props.mappedTodoState.todoToDelete);
   }
 
   
-  // submitEditTodo(e){
-  //   e.preventDefault();
-  //   const editForm = document.getElementById('EditTodoForm');
-  //   if(editForm.todoText.value !== ""){
-  //     const data = new FormData();
-  //     data.append('id', editForm.id.value);
-  //    data.append('todoText', editForm.todoText.value);
-  //     data.append('todoDesc', editForm.todoDesc.value);
-  //     this.props.mappedEditTodo(data);
-  //   }
-  //   else{
-  //     return;
-  //   }
+  submitEditTodo(e){
+    e.preventDefault();
+    const editForm = document.getElementById('EditTodoForm');
+    if(editForm.todoText.value !== ""){
+      const data = new FormData();
+      data.append('id', editForm.id.value);
+     data.append('todoText', editForm.todoText.value);
+      data.append('todoDesc', editForm.todoDesc.value);
+      this.props.mappedEditTodo(data);
+    }
+    else{
+      return;
+    }
 
-  // }
+  }
 
   render(){
     const todoState = this.props.mappedTodoState;
