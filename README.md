@@ -4,8 +4,8 @@
 
 ### Usage :
 
-´´´
+```
 1. cd client & server
 2. npm install
 3. npm start 
-´´´
+```
